@@ -46,7 +46,7 @@ const PROJECTS = [
     period: "Mar 2023 – Sept 2025",
     color: "#FC7373",
     icon: "📦",
-    description:[
+    description :[
       "Built educational prototypes that teach computational thinking and basic coding concepts. Led iterative testing, user research, and product improvements. A funded STEAM startup focused on making tech education accessible.",
       "Secured $4,000 in seed funding and official recognition from the school board — proof that the vision had real legs.",
       "Took ideas from napkin sketches to a working product through hands-on ideation and development.",
