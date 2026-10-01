@@ -7,22 +7,46 @@ const SECTIONS = ["Home", "Experience", "Projects", "Skills", "Contact"];
 const EXPERIENCE = [
   {
     id: 1,
-    company: "Interac Corp",
-    role: "e-Transfer Application Operations Intern",
-    period: "May 2025 – Sept 2025",
-    color: "#FFB92A",
-    icon: "/images/Interac_logo.png",
+    company: "Cybrid",
+    role: "Engineering Intern — B2B Team",
+    period: "May 2026 – Sept 2026",
+    color: "#73D4FC",
+    icon: "💸",
     bullets: [
-      "Supported mission-critical financial systems, improving reliability through diagnostics, tooling, and iterative problem-solving.",
-      "Dove deep into Splunk to hunt down root causes, analyze system logs, and monitor behavior across large-scale environments.",
-      "Ran the internal ticketing pipeline triaging, tracking, and driving issues to resolution across dev and infrastructure.",
-      "Leveled up ServiceNow documentation to streamline incident response and keep operational workflows sharp.",
-      "Collaborated with cross-functional teams to implement monitoring improvements in AppDynamics, enhancing visibility into application performance.",
-      "Helped tighten the application lifecycle, boosting deployment speed and hardening system stability.",
+      "Enabled 5 new payout corridors across 4 payment rails (Hong Kong, the Netherlands, Germany, Pakistan, and Bangladesh), and generalized the SEPA integration so onboarding the next Eurozone country is a one-line change.",
+      "Diagnosed and resolved a crypto-to-fiat conversion regression, and shipped account and wallet creation on the Accounts page.",
+      "Built the Playwright end-to-end test suite for the portal-payments product from the ground up — 10 hermetic test cases covering recipients, payments, conversions, transaction details, and insufficient-balance guards — making it the last of the company's portals to gain E2E coverage in CI.",
+      "Integrated the suite into CircleCI and the Makefile with a non-interactive auth flow that keeps CI sessions authenticated without manual OAuth login; every merge now runs through these tests.",
+      "Authored the onboarding documentation for new engineers, consolidating setup info previously scattered across the codebase and internal tools.",
     ],
   },
   {
     id: 2,
+    company: "Interac Corp.",
+    role: "e-Transfer AppOps Intern",
+    period: "May 2025 – Sept 2025",
+    color: "#FFB92A",
+    icon: "/images/Interac_logo.png",
+    bullets: [
+      "Investigated and drove resolution of production incidents in live e-Transfer environments, using Splunk for log analysis, system health monitoring, and root-cause investigation.",
+      "Maintained ServiceNow runbooks and incident-response documentation, and prioritized incoming tickets alongside development and infrastructure teams — reducing resolution time for recurring issues.",
+    ],
+  },
+  {
+    id: 3,
+    company: "Eden's Box",
+    role: "Co-Founder & Product Lead",
+    period: "Mar 2023 – Sept 2025",
+    color: "#FC7373",
+    icon: "📦",
+    bullets: [
+      "Co-founded an impact-driven startup centered on sustainable living, wellness, and environmental education, growing it from concept to a funded, school board-recognized venture.",
+      "Secured $4,000 in seed funding through competitive pitching to business owners, investors, and community stakeholders, validating the product's market potential.",
+      "Built educational STEAM kit prototypes and led iterative testing, user research, and product improvements.",
+    ],
+  },
+  {
+    id: 4,
     company: "SAP Inc.",
     role: "Software Internship",
     period: "Sept 2023 – Jan 2024",
@@ -42,18 +66,17 @@ const EXPERIENCE = [
 const PROJECTS = [
   {
     id: 1,
-    title: "Eden's Box STEAM Kits",
-    period: "Mar 2023 – Sept 2025",
-    color: "#FC7373",
-    icon: "📦",
-    description :[
-      "Built educational prototypes that teach computational thinking and basic coding concepts. Led iterative testing, user research, and product improvements. A funded STEAM startup focused on making tech education accessible.",
-      "Secured $4,000 in seed funding and official recognition from the school board — proof that the vision had real legs.",
-      "Took ideas from napkin sketches to a working product through hands-on ideation and development.",
-      "Pitched directly to business owners and stakeholders, closing funding to fuel the project forward.",
-      "Drove community engagement and built something rooted in real-world, impact-driven innovation.",
+    title: "Treasure Run",
+    period: "C · Python · ctypes · curses",
+    color: "#E8FC73",
+    icon: "🗝️",
+    link: "https://github.com/talinehenin/Treasure-Runner",
+    description: [
+      "Sokoban-style terminal dungeon game: push obstacles and collect treasure across interconnected rooms linked by portals, with run progress and profile stats persisted to JSON between sessions.",
+      "Built as a two-language system — room, player, and pushable-object state live in a C core exposed to a Python runtime through ctypes bindings, with an explicit boundary for struct layout and memory ownership.",
+      "Structured the Python side as MVC (a model wrapping the C engine, a controller owning game flow, and a curses view handling rendering) so engine and game logic are covered by an assertion-based test suite without starting the UI.",
     ],
-    tags: ["Education", "Prototyping", "User Research", "Startup"],
+    tags: ["C", "Python", "ctypes", "curses", "MVC", "Testing"],
   },
   {
     id: 2,
@@ -68,24 +91,32 @@ const PROJECTS = [
 ];
 
 const SKILLS = {
-  languages: [
-    { name: "Python", level: 80 },
-    { name: "C", level: 90 },
-    { name: "Java", level: 82 },
-    { name: "SQL", level: 70 },
-    { name: "HTML/CSS", level: 88 },
-    { name: "React.js", level: 70 },
+  languages: ["C", "C++", "Python", "JavaScript", "TypeScript"],
+  web: ["Next.js", "React", "Tailwind CSS", "HTML/CSS"],
+  tools: ["Git", "GitHub", "Vercel", "Docker"],
+  testing: [
+    "Playwright", "End-to-End Test Design", "CI/CD Integration (CircleCI)",
+    "Regression Testing", "Test Plan Authoring",
   ],
-  tools: [
-    "Git", "Linux", "Splunk", "ServiceNow", "AppDynamics",
-    "SAP Build", "VS Code", "Figma", "Docker", "APIs",
-  ],
+  operations: ["Splunk", "ServiceNow", "Jira", "Confluence"],
   knowledge: [
     "AI Ethics", "Algorithms & Data Structures", "System Monitoring",
-    "Agile Workflows", "Experimentation Pipelines", "Model Behavior Evaluation",
+    "Incident Response", "Payments Infrastructure", "Agile Workflows",
     "LLMs", "Operating Systems",
   ],
 };
+
+const SKILL_TABS = [
+  { key: "languages", label: "Languages" },
+  { key: "web", label: "Web & Backend" },
+  { key: "tools", label: "Tools & Platforms" },
+  { key: "testing", label: "Testing & CI" },
+  { key: "operations", label: "Monitoring & Ops" },
+  { key: "knowledge", label: "Knowledge" },
+  { key: "courses", label: "Courses" },
+];
+
+const TAG_COLORS = ["#E8FC73", "#73D4FC", "#FC7373", "#C473FC"];
 
 const COURSES = [
   "Data Structures & Algorithms",
@@ -189,26 +220,6 @@ function Reveal({ children, delay = 0 }) {
   );
 }
 
-function SkillBar({ name, level, index }) {
-  const ref = useRef(null);
-  const [inView, setInView] = useState(false);
-  useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => e.isIntersecting && setInView(true), { threshold: 0.3 });
-    if (ref.current) obs.observe(ref.current);
-    return () => obs.disconnect();
-  }, []);
-  return (
-    <div ref={ref} style={{ marginBottom: 18 }}>
-      <div style={{ display: "flex", justifyContent: "space-between", marginBottom: 6, fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 0.8, color: "#888" }}>
-        <span>{name}</span><span>{level}%</span>
-      </div>
-      <div style={{ height: 3, background: "#1a1a1a", borderRadius: 2, overflow: "hidden" }}>
-        <div style={{ height: "100%", width: inView ? `${level}%` : "0%", background: "linear-gradient(90deg, #E8FC73, #73D4FC)", borderRadius: 2, transition: `width 1s cubic-bezier(0.22,1,0.36,1) ${index * 0.1}s` }} />
-      </div>
-    </div>
-  );
-}
-
 function ExpandableCard({ item, isExpanded, onToggle, type }) {
   const [hovered, setHovered] = useState(false);
   return (
@@ -221,7 +232,7 @@ function ExpandableCard({ item, isExpanded, onToggle, type }) {
       <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
         <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
           <span style={{ fontSize: 26, width: 48, height: 48, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 12, background: `${item.color}14`, transition: "transform 0.4s cubic-bezier(0.22,1,0.36,1)", transform: hovered ? "rotate(8deg) scale(1.08)" : "none", flexShrink: 0 }}>
-            <img src={item.icon} alt="" style={{ width: 28, height: 28, objectFit: "contain" }} />
+            {item.icon.startsWith("/") ? <img src={item.icon} alt="" style={{ width: 28, height: 28, objectFit: "contain" }} /> : item.icon}
           </span>
           <div>
             <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, fontWeight: 500, color: "#f0f0f0", margin: 0 }}>
@@ -241,7 +252,7 @@ function ExpandableCard({ item, isExpanded, onToggle, type }) {
           </span>
         </div>
       </div>
-      <div style={{ maxHeight: isExpanded ? 500 : 0, overflow: "hidden", transition: "max-height 0.5s cubic-bezier(0.22,1,0.36,1), opacity 0.4s", opacity: isExpanded ? 1 : 0 }}>
+      <div style={{ maxHeight: isExpanded ? 1200 : 0, overflow: "hidden", transition: "max-height 0.5s cubic-bezier(0.22,1,0.36,1), opacity 0.4s", opacity: isExpanded ? 1 : 0 }}>
         <div style={{ paddingTop: 18, paddingLeft: 62 }}>
           {type === "experience" ? (
             <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
@@ -254,9 +265,16 @@ function ExpandableCard({ item, isExpanded, onToggle, type }) {
             </ul>
           ) : (
             <>
-              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, lineHeight: 1.7, color: "#888", maxWidth: 540, margin: "0 0 14px 0" }}>
-                {item.description}
-              </p>
+              {(Array.isArray(item.description) ? item.description : [item.description]).map((d, i) => (
+                <p key={i} style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, lineHeight: 1.7, color: "#888", maxWidth: 640, margin: "0 0 14px 0" }}>
+                  {d}
+                </p>
+              ))}
+              {item.link && (
+                <a href={item.link} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} style={{ display: "inline-block", fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 1, color: item.color, textDecoration: "none", marginBottom: 14 }}>
+                  VIEW ON GITHUB →
+                </a>
+              )}
               <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
                 {item.tags.map((t) => (
                   <span key={t} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: 0.6, padding: "4px 10px", borderRadius: 20, border: `1px solid ${item.color}40`, color: item.color }}>
@@ -404,7 +422,7 @@ export default function Portfolio() {
         <Reveal>
           <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
             <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#8b45da", animation: "pulse 2s ease-in-out infinite" }} />
-            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 2, color: "#8b45da" }}>CURRENTLY INTERNING AT CYBRID</span>
+            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 2, color: "#8b45da" }}>RECENTLY ENGINEERING INTERN @ CYBRID</span>
           </div>
         </Reveal>
         <Reveal delay={0.08}>
@@ -414,7 +432,7 @@ export default function Portfolio() {
         </Reveal>
         <Reveal delay={0.16}>
           <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 17, lineHeight: 1.75, color: "#777", maxWidth: 520, marginTop: 24 }}>
-            AI-focused Computer Science student at the University of Guelph with hands-on experience in application operations, data-driven diagnostics, and building tools for high-availability systems.
+            AI-focused Computer Science student at the University of Guelph. I’ve shipped payout corridors and end-to-end test infrastructure for a payments platform at Cybrid, and kept Interac e-Transfer running smoothly in production.
           </p>
         </Reveal>
         <Reveal delay={0.24}>
@@ -477,7 +495,7 @@ export default function Portfolio() {
         </Reveal>
         <Reveal delay={0.08}>
           <div style={{ display: "flex", gap: 4, marginBottom: 36, flexWrap: "wrap" }}>
-            {[{ key: "languages", label: "Languages" }, { key: "tools", label: "Tools" }, { key: "knowledge", label: "Knowledge" }, { key: "courses", label: "Courses" }].map((tab) => (
+            {SKILL_TABS.map((tab) => (
               <button key={tab.key} onClick={() => setActiveTab(tab.key)} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 1.5, textTransform: "uppercase", padding: "10px 20px", borderRadius: 24, border: `1px solid ${activeTab === tab.key ? "#E8FC73" : "#1a1a1a"}`, background: activeTab === tab.key ? "#E8FC7315" : "transparent", color: activeTab === tab.key ? "#E8FC73" : "#555", cursor: "pointer", transition: "all 0.3s ease" }}>
                 {tab.label}
               </button>
@@ -485,19 +503,9 @@ export default function Portfolio() {
           </div>
         </Reveal>
         <div style={{ minHeight: 220 }}>
-          {activeTab === "languages" && (
-            <div style={{ maxWidth: 500, animation: "slideIn 0.4s ease" }}>
-              {SKILLS.languages.map((s, i) => <SkillBar key={s.name} name={s.name} level={s.level} index={i} />)}
-            </div>
-          )}
-          {activeTab === "tools" && (
-            <div style={{ animation: "slideIn 0.4s ease" }}>
-              <TagCloud items={SKILLS.tools} colors={["#E8FC73", "#73D4FC", "#FC7373", "#C473FC"]} />
-            </div>
-          )}
-          {activeTab === "knowledge" && (
-            <div style={{ animation: "slideIn 0.4s ease" }}>
-              <TagCloud items={SKILLS.knowledge} colors={["#73D4FC", "#E8FC73", "#C473FC", "#FC7373"]} />
+          {activeTab !== "courses" && (
+            <div key={activeTab} style={{ animation: "slideIn 0.4s ease" }}>
+              <TagCloud items={SKILLS[activeTab]} colors={TAG_COLORS} />
             </div>
           )}
           {activeTab === "courses" && (
@@ -532,6 +540,7 @@ export default function Portfolio() {
                 <a href="mailto:taline.henin@gmail.com" style={{ color: "#888", textDecoration: "none" }}>taline.henin@gmail.com</a>
                 <a href="https://linkedin.com/in/taline-henin/" target="_blank" rel="noreferrer" style={{ color: "#666", textDecoration: "none" }}>linkedin.com/in/taline-henin</a>
                 <a href="https://github.com/talinehenin" target="_blank" rel="noreferrer" style={{ color: "#666", textDecoration: "none" }}>github.com/talinehenin</a>
+                <span style={{ color: "#555" }}>Greater Toronto Area, Ontario</span>
                 <div style={{ marginTop: 8 }}><LiveClock /></div>
               </div>
             </Reveal>
