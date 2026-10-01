@@ -66,6 +66,20 @@ const EXPERIENCE = [
 const PROJECTS = [
   {
     id: 1,
+    title: "Syllaboard",
+    period: "JavaScript · HTML/CSS · SheetJS",
+    color: "#73FCB0",
+    icon: "📋",
+    description: [
+      "Single-page web app that turns a course-load spreadsheet into an interactive Kanban board and a day-by-day and week-by-week study schedule, so deadlines get spread out instead of piling up.",
+      "Wrote a scheduler that estimates each assessment's effort from its weight, course credits, and difficulty, then spreads the hours across the days before it's due — filling lighter days first, respecting daily hour caps, and flagging deadlines that can't fit.",
+      "Added a \"what should I do right now?\" picker, weekly load ratings with overload warnings, a running grade calculator, and .ics calendar export for Google, Apple, and Outlook calendars.",
+      "Runs entirely in the browser with no build step: spreadsheets are parsed client-side with SheetJS and all data stays in local storage. Includes six themes plus light/dark mode, with colorblind-safe status colors.",
+    ],
+    tags: ["JavaScript", "HTML/CSS", "SheetJS", "Scheduling", "Kanban", "Local Storage"],
+  },
+  {
+    id: 2,
     title: "Treasure Run",
     period: "C · Python · ctypes · curses",
     color: "#E8FC73",
@@ -79,7 +93,7 @@ const PROJECTS = [
     tags: ["C", "Python", "ctypes", "curses", "MVC", "Testing"],
   },
   {
-    id: 2,
+    id: 3,
     title: "CultureConnect",
     period: "Sept 2023 – Jan 2024",
     color: "#C473FC",
