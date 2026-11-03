@@ -1,26 +1,134 @@
-@import "tailwindcss";
+/* Tokens from the Taline design system. CRT Night (dark) is the default theme. */
+:root,
+[data-theme="dark"] {
+  --bg: #0d0b26;
+  --surface: #16133a;
+  --surface-raised: #211c52;
+  --line: #8c7fe0;
+  --ink: #efeaff;
+  --ink-muted: #b3a8e6;
+  --brand: #4a2bff;
+  --on-brand: #ffffff;
+  --cyan: #3ef2ff;
+  --magenta: #ff5cdc;
+  --phosphor: #38f28a;
+  --sunset: #f2a6e8;
+  --on-accent: #0d0b26;
+  --link: #3ef2ff;
+  --focus: #3ef2ff;
+  --text-cyan: #3ef2ff;
+  --text-magenta: #ff5cdc;
+  --text-phosphor: #38f28a;
+  --shadow-pixel: 4px 4px 0 0 #3ef2ff;
+  --shadow-glow: 0 0 16px 0 rgba(62, 242, 255, 0.45);
+  color-scheme: dark;
+}
+
+[data-theme="light"] {
+  --bg: #efeaf7;
+  --surface: #f8f6fc;
+  --surface-raised: #ffffff;
+  --line: #7b6fd6;
+  --ink: #1a1540;
+  --ink-muted: #4f4780;
+  --brand: #4a2bff;
+  --on-brand: #ffffff;
+  --cyan: #3ee0f0;
+  --magenta: #ff5cdc;
+  --phosphor: #38f28a;
+  --sunset: #f6c4ef;
+  --on-accent: #0d0b26;
+  --link: #3a1fe0;
+  --focus: #3a1fe0;
+  --text-cyan: #00707d;
+  --text-magenta: #b0148c;
+  --text-phosphor: #0d7a43;
+  --shadow-pixel: 4px 4px 0 0 #1a1540;
+  /* "none" can't sit in a shadow list, so Plastic Day's no-glow is a transparent shadow */
+  --shadow-glow: 0 0 0 0 transparent;
+  color-scheme: light;
+}
+
+[data-theme="phosphor"] {
+  --bg: #020d06;
+  --surface: #04170b;
+  --surface-raised: #082513;
+  --line: #2fbf6a;
+  --ink: #c8ffd9;
+  --ink-muted: #6fd99a;
+  --brand: #1fae5a;
+  --on-brand: #020d06;
+  --cyan: #7dffb0;
+  --magenta: #c4ff5c;
+  --phosphor: #38f28a;
+  --sunset: #a8f0c6;
+  --on-accent: #020d06;
+  --link: #7dffb0;
+  --focus: #c4ff5c;
+  --text-cyan: #7dffb0;
+  --text-magenta: #c4ff5c;
+  --text-phosphor: #38f28a;
+  --shadow-pixel: 4px 4px 0 0 #38f28a;
+  --shadow-glow: 0 0 16px 0 rgba(56, 242, 138, 0.5);
+  color-scheme: dark;
+}
 
 :root {
-  --background: #ffffff;
-  --foreground: #171717;
+  --font-display: "Jacquard 24", Silkscreen, serif;
+  --font-terminal: VT323, "Courier New", monospace;
+  --font-sans: "IBM Plex Sans", system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, monospace;
+
+  --pixel: 2px;
+  --space-1: 4px;
+  --space-2: 8px;
+  --space-3: 16px;
+  --space-4: 24px;
+  --space-5: 40px;
+  --space-6: 64px;
+
+  --radius-none: 0;
+  --radius-sm: 2px;
+  --radius-md: 4px;
 }
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
 }
 
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+html {
+  scroll-behavior: smooth;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 16px;
+  line-height: 24px;
+}
+
+::selection {
+  background: var(--brand);
+  color: var(--on-brand);
+}
+
+a {
+  color: var(--link);
+}
+
+a:focus-visible,
+button:focus-visible,
+summary:focus-visible {
+  outline: 2px solid var(--focus);
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
