@@ -26,6 +26,13 @@ const THEMES = [
 
 const EXPERIENCE = [
   {
+    company: "TD",
+    role: "Incoming Intern",
+    period: "WINTER 2027 · INCOMING",
+    summary: "I'm joining TD for the winter 2027 term.",
+    bullets: [],
+  },
+  {
     company: "CYBRID",
     role: "Engineering Intern",
     team: "B2B Team",
@@ -274,6 +281,7 @@ export default function Portfolio() {
               <a className="th-btn is-magenta" href="#contact">&gt; SAY HI</a>
             </div>
             <div className="hero-meta">
+              <span className="th-tag th-tag--outline">● INCOMING @ TD · WINTER 2027</span>
               <span className="th-tag th-tag--outline">B.COMP · CS / AI</span>
               <span className="th-tag th-tag--outline">UNIVERSITY OF GUELPH</span>
               <span className="th-tag th-tag--outline">CLASS OF 2028</span>
@@ -297,6 +305,7 @@ export default function Portfolio() {
                 <div className="th-timeline__role">{exp.role}</div>
                 <div className="exp-company">{exp.company}{exp.team ? ` · ${exp.team.toUpperCase()}` : ""}</div>
                 <p className="th-timeline__desc">{exp.summary}</p>
+                {exp.bullets.length > 0 && (
                 <details className="exp-more">
                   <summary>
                     <span className="exp-more__show">MORE</span>
@@ -311,6 +320,7 @@ export default function Portfolio() {
                     ))}
                   </ul>
                 </details>
+                )}
               </li>
             ))}
           </ol>
