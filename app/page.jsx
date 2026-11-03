@@ -81,6 +81,8 @@ const PROJECTS = [
     description:
       "Turns a course-load spreadsheet into a Kanban board and a day-by-day study plan, so deadlines get spread out instead of piling up. The scheduler fills lighter days first and flags deadlines that can't fit, all in the browser.",
     tags: ["JAVASCRIPT", "SHEETJS", "HTML/CSS"],
+    link: "https://syllaboard.ca",
+    linkLabel: "SYLLABOARD.CA",
   },
   {
     title: "Treasure Run",
@@ -89,6 +91,7 @@ const PROJECTS = [
       "A Sokoban-style dungeon game: push obstacles and collect treasure across rooms linked by portals. A C engine runs under a Python MVC layer through ctypes, so the game logic is tested without the UI.",
     tags: ["C", "PYTHON", "CTYPES", "CURSES"],
     link: "https://github.com/talinehenin/Treasure-Runner",
+    linkLabel: "GITHUB",
   },
   {
     title: "CultureConnect",
@@ -322,7 +325,7 @@ export default function Portfolio() {
                 <>
                   <Pixelscape color={rot(i + 3)} className="th-card__thumb" />
                   <div className="th-card__body">
-                    <span className="th-card__meta">{p.meta}{p.link ? " · GITHUB" : ""}</span>
+                    <span className="th-card__meta">{p.meta}{p.linkLabel ? ` · ${p.linkLabel}` : ""}</span>
                     <h3 className="th-card__title">{p.title}</h3>
                     <p className="th-card__desc">{p.description}</p>
                     <div className="th-card__tags">
