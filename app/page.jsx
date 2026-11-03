@@ -1,574 +1,405 @@
 "use client";
 
-import { useState, useEffect, useRef, useCallback } from "react";
+import { useEffect, useState } from "react";
+import Wordmark from "./Wordmark";
 
-const SECTIONS = ["Home", "Experience", "Projects", "Skills", "Contact"];
+const EMAIL = "taline.henin@gmail.com";
+
+// Identity colors rotate in this order so each appears about as often.
+const ROTATION = ["is-cyan", "is-magenta", "is-phosphor", "is-brand", "is-sunset"];
+const rot = (i) => ROTATION[i % ROTATION.length];
+// Sparkles skip sunset: it's too pale on the Plastic Day background.
+const SPARKLE_ROTATION = ["is-cyan", "is-magenta", "is-phosphor", "is-brand"];
+
+const NAV = [
+  { id: "experience", label: "EXPERIENCE", color: "is-cyan" },
+  { id: "projects", label: "PROJECTS", color: "is-magenta" },
+  { id: "skills", label: "SKILLS", color: "is-phosphor" },
+  { id: "contact", label: "CONTACT", color: "is-brand" },
+];
+
+const THEMES = [
+  { id: "dark", label: "NIGHT" },
+  { id: "light", label: "DAY" },
+  { id: "phosphor", label: "PHOSPHOR" },
+];
 
 const EXPERIENCE = [
   {
-    id: 1,
-    company: "Cybrid",
-    role: "Engineering Intern — B2B Team",
-    period: "May 2026 – Sept 2026",
-    color: "#73D4FC",
-    icon: "💸",
+    company: "CYBRID",
+    role: "Engineering Intern",
+    team: "B2B Team",
+    period: "MAY 2026 — SEPT 2026",
+    summary: "I shipped new payout corridors and built end-to-end test coverage for a payments platform.",
     bullets: [
       "Enabled 5 new payout corridors across 4 payment rails (Hong Kong, the Netherlands, Germany, Pakistan, and Bangladesh), and generalized the SEPA integration so onboarding the next Eurozone country is a one-line change.",
       "Diagnosed and resolved a crypto-to-fiat conversion regression, and shipped account and wallet creation on the Accounts page.",
-      "Built the Playwright end-to-end test suite for the portal-payments product from the ground up — 10 hermetic test cases covering recipients, payments, conversions, transaction details, and insufficient-balance guards — making it the last of the company's portals to gain E2E coverage in CI.",
-      "Integrated the suite into CircleCI and the Makefile with a non-interactive auth flow that keeps CI sessions authenticated without manual OAuth login; every merge now runs through these tests.",
-      "Authored the onboarding documentation for new engineers, consolidating setup info previously scattered across the codebase and internal tools.",
+      "Built the Playwright end-to-end test suite for the portal-payments product from the ground up: 10 hermetic test cases covering recipients, payments, conversions, transaction details, and insufficient-balance guards. It was the last of the company's portals to gain E2E coverage in CI.",
+      "Integrated the suite into CircleCI and the Makefile with a non-interactive auth flow that keeps CI sessions authenticated without manual OAuth login. Every merge now runs through these tests.",
+      "Wrote the onboarding documentation for new engineers, pulling together setup info that had been scattered across the codebase and internal tools.",
     ],
   },
   {
-    id: 2,
-    company: "Interac Corp.",
+    company: "INTERAC CORP.",
     role: "e-Transfer AppOps Intern",
-    period: "May 2025 – Sept 2025",
-    color: "#FFB92A",
-    icon: "/images/Interac_logo.png",
+    period: "MAY 2025 — SEPT 2025",
+    summary: "I kept live e-Transfer environments healthy, from incident triage to root cause.",
     bullets: [
       "Investigated and drove resolution of production incidents in live e-Transfer environments, using Splunk for log analysis, system health monitoring, and root-cause investigation.",
-      "Maintained ServiceNow runbooks and incident-response documentation, and prioritized incoming tickets alongside development and infrastructure teams — reducing resolution time for recurring issues.",
+      "Maintained ServiceNow runbooks and incident-response documentation, and prioritized incoming tickets alongside development and infrastructure teams, reducing resolution time for recurring issues.",
     ],
   },
   {
-    id: 3,
-    company: "Eden's Box",
+    company: "EDEN'S BOX",
     role: "Co-Founder & Product Lead",
-    period: "Mar 2023 – Sept 2025",
-    color: "#FC7373",
-    icon: "📦",
+    period: "MAR 2023 — SEPT 2025",
+    summary: "I co-founded a startup for sustainable living, wellness, and environmental education.",
     bullets: [
-      "Co-founded an impact-driven startup centered on sustainable living, wellness, and environmental education, growing it from concept to a funded, school board-recognized venture.",
-      "Secured $4,000 in seed funding through competitive pitching to business owners, investors, and community stakeholders, validating the product's market potential.",
+      "Grew the initiative from concept to a funded, school board-recognized venture.",
+      "Secured $4,000 in seed funding by pitching to business owners, investors, and community stakeholders.",
       "Built educational STEAM kit prototypes and led iterative testing, user research, and product improvements.",
     ],
   },
   {
-    id: 4,
-    company: "SAP Inc.",
-    role: "Software Internship",
-    period: "Sept 2023 – Jan 2024",
-    color: "#006BB8",
-    icon: "/images/Sap_logo.png",
+    company: "SAP",
+    role: "Software Intern",
+    period: "SEPT 2023 — JAN 2024",
+    summary: "I built CultureConnect, a low-code app for cultural literacy, on SAP Build.",
     bullets: [
-      "Built CultureConnect from the ground up on SAP Build — a low-code/no-code app designed to bridge cultural literacy gaps.",
-      "Trained in AI Ethics and Generative AI with a focus on building responsible, human-centered AI systems.",
-      "Experimented with VR and RAUM technologies to find new ways to streamline team workflows.",
-      "Conducted user research and testing to iterate on the CultureConnect experience, integrating feedback to enhance usability and engagement.",
-      "Presented project demos and findings, translating technical work into clear business value.",
-      "Recognized by SAP's D-Shop team for driving innovation and delivering meaningful social impact.",
+      "Trained in AI ethics and generative AI, with a focus on responsible, human-centered systems.",
+      "Ran user research and testing to iterate on CultureConnect's usability.",
+      "Presented demos and findings, translating technical work into business value.",
+      "Recognized by SAP's D-Shop team for innovation and social impact.",
     ],
   },
 ];
 
 const PROJECTS = [
   {
-    id: 1,
     title: "Syllaboard",
-    period: "JavaScript · HTML/CSS · SheetJS",
-    color: "#73FCB0",
-    icon: "📋",
-    description: [
-      "Single-page web app that turns a course-load spreadsheet into an interactive Kanban board and a day-by-day and week-by-week study schedule, so deadlines get spread out instead of piling up.",
-      "Wrote a scheduler that estimates each assessment's effort from its weight, course credits, and difficulty, then spreads the hours across the days before it's due — filling lighter days first, respecting daily hour caps, and flagging deadlines that can't fit.",
-      "Added a \"what should I do right now?\" picker, weekly load ratings with overload warnings, a running grade calculator, and .ics calendar export for Google, Apple, and Outlook calendars.",
-      "Runs entirely in the browser with no build step: spreadsheets are parsed client-side with SheetJS and all data stays in local storage. Includes six themes plus light/dark mode, with colorblind-safe status colors.",
-    ],
-    tags: ["JavaScript", "HTML/CSS", "SheetJS", "Scheduling", "Kanban", "Local Storage"],
-  },
-  {
-    id: 2,
-    title: "Treasure Run",
-    period: "C · Python · ctypes · curses",
-    color: "#E8FC73",
-    icon: "🗝️",
-    link: "https://github.com/talinehenin/Treasure-Runner",
-    description: [
-      "Sokoban-style terminal dungeon game: push obstacles and collect treasure across interconnected rooms linked by portals, with run progress and profile stats persisted to JSON between sessions.",
-      "Built as a two-language system — room, player, and pushable-object state live in a C core exposed to a Python runtime through ctypes bindings, with an explicit boundary for struct layout and memory ownership.",
-      "Structured the Python side as MVC (a model wrapping the C engine, a controller owning game flow, and a curses view handling rendering) so engine and game logic are covered by an assertion-based test suite without starting the UI.",
-    ],
-    tags: ["C", "Python", "ctypes", "curses", "MVC", "Testing"],
-  },
-  {
-    id: 3,
-    title: "CultureConnect",
-    period: "Sept 2023 – Jan 2024",
-    color: "#C473FC",
-    icon: "🌍",
+    meta: "WEB APP",
     description:
-      "Developed an interactive cultural literacy application using SAP Build low-code tools. Integrated UX design with AI-driven insights learned during D-Shop training.",
-    tags: ["SAP Build", "Low-Code", "UX Design", "AI"],
+      "Turns a course-load spreadsheet into a Kanban board and a day-by-day study plan, so deadlines get spread out instead of piling up. The scheduler fills lighter days first and flags deadlines that can't fit, all in the browser.",
+    tags: ["JAVASCRIPT", "SHEETJS", "HTML/CSS"],
+  },
+  {
+    title: "Treasure Run",
+    meta: "TERMINAL GAME",
+    description:
+      "A Sokoban-style dungeon game: push obstacles and collect treasure across rooms linked by portals. A C engine runs under a Python MVC layer through ctypes, so the game logic is tested without the UI.",
+    tags: ["C", "PYTHON", "CTYPES", "CURSES"],
+    link: "https://github.com/talinehenin/Treasure-Runner",
+  },
+  {
+    title: "CultureConnect",
+    meta: "2023 · LOW-CODE APP",
+    description:
+      "An interactive cultural-literacy app I built at SAP with SAP Build, shaped by user research and the AI ethics training from SAP's D-Shop.",
+    tags: ["SAP BUILD", "UX DESIGN", "AI"],
   },
 ];
 
-const SKILLS = {
-  languages: ["C", "C++", "Python", "JavaScript", "TypeScript"],
-  web: ["Next.js", "React", "Tailwind CSS", "HTML/CSS"],
-  tools: ["Git", "GitHub", "Vercel", "Docker"],
-  testing: [
-    "Playwright", "End-to-End Test Design", "CI/CD Integration (CircleCI)",
-    "Regression Testing", "Test Plan Authoring",
-  ],
-  operations: ["Splunk", "ServiceNow", "Jira", "Confluence"],
-  knowledge: [
-    "AI Ethics", "Algorithms & Data Structures", "System Monitoring",
-    "Incident Response", "Payments Infrastructure", "Agile Workflows",
-    "LLMs", "Operating Systems",
-  ],
-};
-
-const SKILL_TABS = [
-  { key: "languages", label: "Languages" },
-  { key: "web", label: "Web & Backend" },
-  { key: "tools", label: "Tools & Platforms" },
-  { key: "testing", label: "Testing & CI" },
-  { key: "operations", label: "Monitoring & Ops" },
-  { key: "knowledge", label: "Knowledge" },
-  { key: "courses", label: "Courses" },
+const SKILLS = [
+  { title: "LANGUAGES", items: ["C", "C++", "PYTHON", "JAVASCRIPT", "TYPESCRIPT"] },
+  { title: "WEB & BACKEND", items: ["NEXT.JS", "REACT", "TAILWIND CSS", "HTML/CSS"] },
+  { title: "TOOLS & PLATFORMS", items: ["GIT", "GITHUB", "VERCEL", "DOCKER"] },
+  { title: "TESTING & CI", items: ["PLAYWRIGHT", "E2E TEST DESIGN", "CIRCLECI", "REGRESSION TESTING", "TEST PLANS"] },
+  { title: "MONITORING & OPS", items: ["SPLUNK", "SERVICENOW", "JIRA", "CONFLUENCE"] },
 ];
-
-const TAG_COLORS = ["#E8FC73", "#73D4FC", "#FC7373", "#C473FC"];
 
 const COURSES = [
   "Data Structures & Algorithms",
   "Analysis & Design of Algorithms",
   "Operating Systems",
-  "Software System Dev & Integration",
+  "Software System Development & Integration",
   "Web Design",
   "AI Ethics",
   "Statistics",
-  "Discrete I & II",
+  "Discrete Mathematics I & II",
   "Linear Algebra",
 ];
 
-function useSpring(target, stiffness = 0.08, damping = 0.82) {
-  const ref = useRef({ value: target, velocity: 0 });
-  const [val, setVal] = useState(target);
-  useEffect(() => {
-    let raf;
-    const tick = () => {
-      const s = ref.current;
-      const force = (target - s.value) * stiffness;
-      s.velocity = (s.velocity + force) * damping;
-      s.value += s.velocity;
-      if (Math.abs(s.velocity) > 0.01 || Math.abs(target - s.value) > 0.01) {
-        setVal(s.value);
-        raf = requestAnimationFrame(tick);
-      } else {
-        s.value = target;
-        setVal(target);
-      }
-    };
-    raf = requestAnimationFrame(tick);
-    return () => cancelAnimationFrame(raf);
-  }, [target, stiffness, damping]);
-  return val;
+function Sparkle({ size, color, twinkle, style, className = "" }) {
+  const classes = ["th-sparkle", size && `th-sparkle--${size}`, color, twinkle && "th-sparkle--twinkle", className];
+  return <span className={classes.filter(Boolean).join(" ")} style={style} aria-hidden="true" />;
 }
 
-function CursorBlob() {
-  const [pos, setPos] = useState({ x: -200, y: -200 });
-  const sx = useSpring(pos.x, 0.05, 0.76);
-  const sy = useSpring(pos.y, 0.05, 0.76);
-  useEffect(() => {
-    const h = (e) => setPos({ x: e.clientX, y: e.clientY });
-    window.addEventListener("mousemove", h);
-    return () => window.removeEventListener("mousemove", h);
-  }, []);
+function Heading({ children, i }) {
   return (
-    <div
-      style={{
-        position: "fixed",
-        left: sx - 140,
-        top: sy - 140,
-        width: 280,
-        height: 280,
-        borderRadius: "50%",
-        background: "radial-gradient(circle, #73d3fc6c 0%, #00025d0f 40%, transparent 70%)",
-        pointerEvents: "none",
-        zIndex: 0,
-        filter: "blur(30px)",
-      }}
-    />
-  );
-}
-
-function MagneticButton({ children, onClick, style }) {
-  const ref = useRef(null);
-  const [offset, setOffset] = useState({ x: 0, y: 0 });
-  const ox = useSpring(offset.x, 0.15, 0.7);
-  const oy = useSpring(offset.y, 0.15, 0.7);
-  const handleMove = useCallback((e) => {
-    const rect = ref.current.getBoundingClientRect();
-    const cx = rect.left + rect.width / 2;
-    const cy = rect.top + rect.height / 2;
-    setOffset({ x: (e.clientX - cx) * 0.25, y: (e.clientY - cy) * 0.25 });
-  }, []);
-  return (
-    <button
-      ref={ref}
-      onMouseMove={handleMove}
-      onMouseLeave={() => setOffset({ x: 0, y: 0 })}
-      onClick={onClick}
-      style={{ ...style, transform: `translate(${ox}px, ${oy}px)`, transition: "background 0.3s, color 0.3s, border-color 0.3s, box-shadow 0.3s" }}
-    >
+    <h2 className="th-heading">
+      <Sparkle size="xl" color={SPARKLE_ROTATION[i % 4]} />
       {children}
-    </button>
+      <Sparkle size="sm" color={SPARKLE_ROTATION[(i + 1) % 4]} />
+    </h2>
   );
 }
 
-function Reveal({ children, delay = 0 }) {
-  const ref = useRef(null);
-  const [visible, setVisible] = useState(false);
+function Pixelscape({ color, className = "" }) {
+  return (
+    <div className={`th-pixelscape ${color} ${className}`.trim()} aria-hidden="true">
+      <span className="band" />
+      <span className="ground" />
+    </div>
+  );
+}
+
+function Window({ title, color, raised, children }) {
+  return (
+    <div className={`th-window ${color}${raised ? " th-window--raised" : ""}`}>
+      <div className="th-window__bar">
+        <span>{title}</span>
+        <span className="th-window__ctrls" aria-hidden="true"><i /><i /></span>
+      </div>
+      <div className="th-window__body">{children}</div>
+    </div>
+  );
+}
+
+function PixelRow({ count = 30 }) {
+  return (
+    <div className="th-pixels" aria-hidden="true">
+      {Array.from({ length: count }, (_, i) => <i key={i} />)}
+    </div>
+  );
+}
+
+function Nav() {
+  const [theme, setTheme] = useState("dark");
+  const [active, setActive] = useState(null);
+
   useEffect(() => {
-    const obs = new IntersectionObserver(([e]) => e.isIntersecting && setVisible(true), { threshold: 0.12 });
-    if (ref.current) obs.observe(ref.current);
+    setTheme(document.documentElement.dataset.theme || "dark");
+    const obs = new IntersectionObserver(
+      (entries) => entries.forEach((e) => e.isIntersecting && setActive(e.target.id)),
+      { rootMargin: "-40% 0px -55% 0px" }
+    );
+    NAV.forEach(({ id }) => {
+      const el = document.getElementById(id);
+      if (el) obs.observe(el);
+    });
     return () => obs.disconnect();
   }, []);
-  return (
-    <div ref={ref} style={{ opacity: visible ? 1 : 0, transform: visible ? "translateY(0)" : "translateY(36px)", transition: `opacity 0.7s ease ${delay}s, transform 0.7s ease ${delay}s` }}>
-      {children}
-    </div>
-  );
-}
 
-function ExpandableCard({ item, isExpanded, onToggle, type }) {
-  const [hovered, setHovered] = useState(false);
-  return (
-    <div
-      onMouseEnter={() => setHovered(true)}
-      onMouseLeave={() => setHovered(false)}
-      onClick={onToggle}
-      style={{ cursor: "pointer", borderBottom: "1px solid #1a1a1a", padding: "24px 0", transition: "background 0.3s", background: hovered ? "rgba(255,255,255,0.015)" : "transparent" }}
-    >
-      <div style={{ display: "flex", alignItems: "center", justifyContent: "space-between", gap: 16, flexWrap: "wrap" }}>
-        <div style={{ display: "flex", alignItems: "center", gap: 14 }}>
-          <span style={{ fontSize: 26, width: 48, height: 48, display: "flex", alignItems: "center", justifyContent: "center", borderRadius: 12, background: `${item.color}14`, transition: "transform 0.4s cubic-bezier(0.22,1,0.36,1)", transform: hovered ? "rotate(8deg) scale(1.08)" : "none", flexShrink: 0 }}>
-            {item.icon.startsWith("/") ? <img src={item.icon} alt="" style={{ width: 28, height: 28, objectFit: "contain" }} /> : item.icon}
-          </span>
-          <div>
-            <h3 style={{ fontFamily: "'Playfair Display', serif", fontSize: 22, fontWeight: 500, color: "#f0f0f0", margin: 0 }}>
-              {type === "experience" ? item.company : item.title}
-            </h3>
-            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#666", letterSpacing: 0.6 }}>
-              {type === "experience" ? item.role : item.period}
-            </span>
-          </div>
-        </div>
-        <div style={{ display: "flex", alignItems: "center", gap: 16 }}>
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: "#444" }}>
-            {type === "experience" ? item.period : ""}
-          </span>
-          <span style={{ fontSize: 18, color: item.color, transition: "transform 0.4s cubic-bezier(0.22,1,0.36,1)", transform: isExpanded ? "rotate(45deg)" : "rotate(0deg)", display: "inline-block", fontWeight: 300 }}>
-            +
-          </span>
-        </div>
-      </div>
-      <div style={{ maxHeight: isExpanded ? 1200 : 0, overflow: "hidden", transition: "max-height 0.5s cubic-bezier(0.22,1,0.36,1), opacity 0.4s", opacity: isExpanded ? 1 : 0 }}>
-        <div style={{ paddingTop: 18, paddingLeft: 62 }}>
-          {type === "experience" ? (
-            <ul style={{ listStyle: "none", padding: 0, margin: 0 }}>
-              {item.bullets.map((b, i) => (
-                <li key={i} style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, lineHeight: 1.7, color: "#888", marginBottom: 8, paddingLeft: 16, position: "relative" }}>
-                  <span style={{ position: "absolute", left: 0, top: 10, width: 4, height: 4, borderRadius: "50%", background: item.color, opacity: 0.6 }} />
-                  {b}
-                </li>
-              ))}
-            </ul>
-          ) : (
-            <>
-              {(Array.isArray(item.description) ? item.description : [item.description]).map((d, i) => (
-                <p key={i} style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 14, lineHeight: 1.7, color: "#888", maxWidth: 640, margin: "0 0 14px 0" }}>
-                  {d}
-                </p>
-              ))}
-              {item.link && (
-                <a href={item.link} target="_blank" rel="noreferrer" onClick={(e) => e.stopPropagation()} style={{ display: "inline-block", fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 1, color: item.color, textDecoration: "none", marginBottom: 14 }}>
-                  VIEW ON GITHUB →
-                </a>
-              )}
-              <div style={{ display: "flex", gap: 8, flexWrap: "wrap" }}>
-                {item.tags.map((t) => (
-                  <span key={t} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, letterSpacing: 0.6, padding: "4px 10px", borderRadius: 20, border: `1px solid ${item.color}40`, color: item.color }}>
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </>
-          )}
-        </div>
-      </div>
-    </div>
-  );
-}
+  const pickTheme = (t) => {
+    document.documentElement.dataset.theme = t;
+    setTheme(t);
+    try { localStorage.setItem("theme", t); } catch {}
+  };
 
-function TagCloud({ items, colors }) {
-  const [hoveredIdx, setHoveredIdx] = useState(null);
   return (
-    <div style={{ display: "flex", flexWrap: "wrap", gap: 10 }}>
-      {items.map((item, i) => (
-        <span
-          key={item}
-          onMouseEnter={() => setHoveredIdx(i)}
-          onMouseLeave={() => setHoveredIdx(null)}
-          style={{
-            fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 0.5, padding: "6px 14px", borderRadius: 24,
-            border: `1px solid ${hoveredIdx === i ? colors[i % colors.length] : "#222"}`,
-            color: hoveredIdx === i ? "#f0f0f0" : "#666",
-            background: hoveredIdx === i ? `${colors[i % colors.length]}18` : "transparent",
-            cursor: "default", transition: "all 0.3s ease", transform: hoveredIdx === i ? "scale(1.08)" : "scale(1)",
-          }}
-        >
-          {item}
-        </span>
-      ))}
-    </div>
+    <nav className="th-nav site-nav" aria-label="Main">
+      <a className="th-nav__logo" href="#top" aria-label="Taline Henin, back to top">
+        <Wordmark width={120} height={32} />
+      </a>
+      <div className="th-nav__links">
+        {NAV.map((n) => (
+          <a key={n.id} href={`#${n.id}`} className={n.color} aria-current={active === n.id ? "location" : undefined}>
+            {n.label}
+          </a>
+        ))}
+      </div>
+      <div className="th-theme is-brand" role="group" aria-label="Theme">
+        {THEMES.map((t) => (
+          <button key={t.id} type="button" aria-pressed={theme === t.id} onClick={() => pickTheme(t.id)}>
+            {t.label}
+          </button>
+        ))}
+      </div>
+    </nav>
   );
 }
 
 function ContactForm() {
   const [form, setForm] = useState({ name: "", email: "", message: "" });
-  const [sent, setSent] = useState(false);
-  const [focused, setFocused] = useState(null);
-  const inputStyle = (field) => ({
-    width: "100%", background: "transparent", border: "none",
-    borderBottom: `1px solid ${focused === field ? "#E8FC73" : "#282828"}`,
-    padding: "12px 0", color: "#eee", fontFamily: "'DM Sans', sans-serif", fontSize: 14, outline: "none", transition: "border-color 0.3s", marginBottom: 24,
-  });
-  const handleSubmit = () => {
-    if (form.name && form.email && form.message) {
-      setSent(true);
-      setTimeout(() => { setSent(false); setForm({ name: "", email: "", message: "" }); }, 3000);
-    }
-  };
-  return sent ? (
-    <div style={{ textAlign: "center", padding: 40, fontFamily: "'Playfair Display', serif", fontSize: 26, color: "#591d7e" }}>
-      Message sent ✦
-      <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#555", marginTop: 8 }}>I'll get back to you soon.</p>
-    </div>
-  ) : (
-    <div style={{ maxWidth: 460 }}>
-      <input placeholder="Your name" value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} onFocus={() => setFocused("name")} onBlur={() => setFocused(null)} style={inputStyle("name")} />
-      <input placeholder="Email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} onFocus={() => setFocused("email")} onBlur={() => setFocused(null)} style={inputStyle("email")} />
-      <textarea placeholder="Tell me about your project…" value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} onFocus={() => setFocused("message")} onBlur={() => setFocused(null)} rows={4} style={{ ...inputStyle("message"), resize: "vertical" }} />
-      <MagneticButton onClick={handleSubmit} style={{ background: "#854ecd", color: "#0a0a0a", border: "none", padding: "13px 36px", borderRadius: 28, fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 1.5, cursor: "pointer", fontWeight: 500 }}>
-        SEND MESSAGE →
-      </MagneticButton>
-    </div>
-  );
-}
 
-function LiveClock() {
-  const [time, setTime] = useState(new Date());
-  useEffect(() => { const i = setInterval(() => setTime(new Date()), 1000); return () => clearInterval(i); }, []);
+  // No backend: open the visitor's mail app with the message filled in.
+  const handleSubmit = (e) => {
+    e.preventDefault();
+    const subject = `Hello from ${form.name}`;
+    const body = `${form.message}\n\n${form.name}${form.email ? ` (${form.email})` : ""}`;
+    window.location.href = `mailto:${EMAIL}?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+  };
+
+  const update = (field) => (e) => setForm({ ...form, [field]: e.target.value });
+
   return (
-    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: "#444" }}>
-      {time.toLocaleTimeString("en-US", { hour: "2-digit", minute: "2-digit", second: "2-digit", hour12: false })} — Local Time
-    </span>
+    <form className="contact-form" onSubmit={handleSubmit}>
+      <div className="th-field">
+        <label htmlFor="c-name">NAME</label>
+        <input className="th-input" id="c-name" required value={form.name} onChange={update("name")} placeholder="Your name" />
+      </div>
+      <div className="th-field">
+        <label htmlFor="c-email">EMAIL</label>
+        <input className="th-input" id="c-email" type="email" value={form.email} onChange={update("email")} placeholder="you@example.com" />
+      </div>
+      <div className="th-field">
+        <label htmlFor="c-message">MESSAGE</label>
+        <textarea className="th-input" id="c-message" rows={4} required value={form.message} onChange={update("message")} placeholder="Hi Taline…" />
+        <span className="th-field__hint">Sending opens your email app with this message ready to go.</span>
+      </div>
+      <div>
+        <button className="th-btn is-phosphor" type="submit">&gt; SEND</button>
+      </div>
+    </form>
   );
 }
 
 export default function Portfolio() {
-  const [activeSection, setActiveSection] = useState(0);
-  const [expandedExp, setExpandedExp] = useState(null);
-  const [expandedProj, setExpandedProj] = useState(null);
-  const [scrollY, setScrollY] = useState(0);
-  const [activeTab, setActiveTab] = useState("languages");
-  const sectionRefs = useRef([]);
-
-  useEffect(() => {
-    const h = () => setScrollY(window.scrollY);
-    window.addEventListener("scroll", h, { passive: true });
-    return () => window.removeEventListener("scroll", h);
-  }, []);
-
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      (entries) => { entries.forEach((e) => { if (e.isIntersecting) { const idx = sectionRefs.current.indexOf(e.target); if (idx !== -1) setActiveSection(idx); } }); },
-      { threshold: 0.35 }
-    );
-    sectionRefs.current.forEach((s) => s && obs.observe(s));
-    return () => obs.disconnect();
-  }, []);
-
-  const scrollTo = (i) => sectionRefs.current[i]?.scrollIntoView({ behavior: "smooth" });
-  const headerOpacity = Math.min(scrollY / 200, 0.92);
+  let tagIndex = 0;
 
   return (
     <>
-      <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,500;0,600;1,400;1,500&family=JetBrains+Mono:wght@300;400;500&family=DM+Sans:wght@300;400;500;700&display=swap" rel="stylesheet" />
-      <style>{`
-        *{margin:0;padding:0;box-sizing:border-box}
-        html{scroll-behavior:smooth}
-        body{background:#0b0b0b;color:#f0f0f0;overflow-x:hidden}
-        ::selection{background:#E8FC73;color:#0a0a0a}
-        ::-webkit-scrollbar{width:5px}
-        ::-webkit-scrollbar-track{background:transparent}
-        ::-webkit-scrollbar-thumb{background:#282828;border-radius:3px}
-        @keyframes float{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-14px) rotate(3deg)}}
-        @keyframes pulse{0%,100%{opacity:0.5}50%{opacity:1}}
-        @keyframes slideIn{from{opacity:0;transform:translateX(-20px)}to{opacity:1;transform:translateX(0)}}
-        @keyframes grain{0%,100%{transform:translate(0,0)}10%{transform:translate(-5%,-10%)}30%{transform:translate(3%,-15%)}50%{transform:translate(-10%,5%)}70%{transform:translate(8%,10%)}90%{transform:translate(-3%,-5%)}}
-      `}</style>
+      <Nav />
 
-      <div style={{position:"fixed",inset:0,zIndex:9999,pointerEvents:"none",opacity:0.025,background:"url(\"data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E\")",animation:"grain 0.5s steps(1) infinite"}} />
-      <CursorBlob />
-
-      {/* HEADER */}
-      <header style={{ position: "fixed", top: 0, left: 0, right: 0, zIndex: 100, padding: "14px 36px", display: "flex", justifyContent: "space-between", alignItems: "center", background: `rgba(11,11,11,${headerOpacity})`, backdropFilter: headerOpacity > 0.1 ? "blur(20px)" : "none", borderBottom: headerOpacity > 0.3 ? "1px solid rgba(255,255,255,0.03)" : "none" }}>
-        <span onClick={() => scrollTo(0)} style={{ fontFamily: "'Playfair Display', serif", fontSize: 20, cursor: "pointer", fontStyle: "italic", color: "#89e0e6", fontWeight: 500 }}>
-          T.H.
-        </span>
-        <nav style={{ display: "flex", gap: 28 }}>
-          {SECTIONS.map((s, i) => (
-            <span key={s} onClick={() => scrollTo(i)} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 2, textTransform: "uppercase", cursor: "pointer", color: activeSection === i ? "#89e0e6" : "#555", transition: "color 0.3s", position: "relative" }}>
-              {s}
-              {activeSection === i && <span style={{ position: "absolute", bottom: -5, left: "50%", transform: "translateX(-50%)", width: 3, height: 3, borderRadius: "50%", background: "#89e0e6" }} />}
-            </span>
-          ))}
-        </nav>
-      </header>
-
-      {/* HERO */}
-      <section ref={(el) => (sectionRefs.current[0] = el)} style={{ minHeight: "100vh", display: "flex", flexDirection: "column", justifyContent: "center", padding: "120px 48px 80px", position: "relative", maxWidth: 1100, margin: "0 auto" }}>
-        <Reveal>
-          <div style={{ display: "flex", alignItems: "center", gap: 10, marginBottom: 20 }}>
-            <div style={{ width: 8, height: 8, borderRadius: "50%", background: "#8b45da", animation: "pulse 2s ease-in-out infinite" }} />
-            <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 2, color: "#8b45da" }}>RECENTLY ENGINEERING INTERN @ CYBRID</span>
-          </div>
-        </Reveal>
-        <Reveal delay={0.08}>
-          <h1 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(44px, 7.5vw, 88px)", fontWeight: 500, lineHeight: 1.08, letterSpacing: "-0.02em", maxWidth: 850 }}>
-            Taline <span style={{ fontStyle: "italic", color: "#89e0e6" }}>Henin</span>
-          </h1>
-        </Reveal>
-        <Reveal delay={0.16}>
-          <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 17, lineHeight: 1.75, color: "#777", maxWidth: 520, marginTop: 24 }}>
-            AI-focused Computer Science student at the University of Guelph. I’ve shipped payout corridors and end-to-end test infrastructure for a payments platform at Cybrid, and kept Interac e-Transfer running smoothly in production.
-          </p>
-        </Reveal>
-        <Reveal delay={0.24}>
-          <div style={{ display: "flex", gap: 14, marginTop: 36, flexWrap: "wrap" }}>
-            <MagneticButton onClick={() => scrollTo(1)} style={{ background: "#89e0e6", color: "#0a0a0a", border: "none", padding: "13px 34px", borderRadius: 28, fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 1.5, cursor: "pointer", fontWeight: 500 }}>
-              VIEW EXPERIENCE
-            </MagneticButton>
-            <MagneticButton onClick={() => scrollTo(4)} style={{ background: "transparent", color: "#f0f0f0", border: "1px solid #2a2a2a", padding: "13px 34px", borderRadius: 28, fontFamily: "'JetBrains Mono', monospace", fontSize: 12, letterSpacing: 1.5, cursor: "pointer", fontWeight: 500 }}>
-              GET IN TOUCH
-            </MagneticButton>
-          </div>
-        </Reveal>
-        <Reveal delay={0.32}>
-          <div style={{ display: "flex", gap: 28, marginTop: 56, fontFamily: "'JetBrains Mono', monospace", fontSize: 11, color: "#444", flexWrap: "wrap" }}>
-            <span>B.Comp — CS / AI Specialization</span><span>·</span><span>Class of 2028</span><span>·</span><span>University of Guelph</span>
-          </div>
-        </Reveal>
-        <div style={{ position: "absolute", right: 60, top: "35%", animation: "float 7s ease-in-out infinite", opacity: 0.08, fontSize: 200, fontFamily: "'Playfair Display', serif", color: "#8b45da", pointerEvents: "none", userSelect: "none" }}>✦</div>
-        <div style={{ position: "absolute", bottom: 28, left: "50%", transform: "translateX(-50%)", display: "flex", flexDirection: "column", alignItems: "center", gap: 6 }}>
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 9, letterSpacing: 3, color: "#333" }}>SCROLL</span>
-          <div style={{ width: 1, height: 36, background: "linear-gradient(to bottom, #333, transparent)" }} />
-        </div>
-      </section>
-
-      {/* EXPERIENCE */}
-      <section ref={(el) => (sectionRefs.current[1] = el)} style={{ padding: "100px 48px", maxWidth: 1100, margin: "0 auto" }}>
-        <Reveal>
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 3, color: "#444" }}>01</span>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(32px, 4.5vw, 50px)", fontWeight: 500, marginTop: 6, marginBottom: 40 }}>Experience</h2>
-        </Reveal>
-        <div style={{ borderTop: "1px solid #1a1a1a" }}>
-          {EXPERIENCE.map((exp, i) => (
-            <Reveal key={exp.id} delay={i * 0.08}>
-              <ExpandableCard item={exp} isExpanded={expandedExp === exp.id} onToggle={() => setExpandedExp(expandedExp === exp.id ? null : exp.id)} type="experience" />
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* PROJECTS */}
-      <section ref={(el) => (sectionRefs.current[2] = el)} style={{ padding: "100px 48px", maxWidth: 1100, margin: "0 auto" }}>
-        <Reveal>
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 3, color: "#444" }}>02</span>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(32px, 4.5vw, 50px)", fontWeight: 500, marginTop: 6, marginBottom: 40 }}>Projects</h2>
-        </Reveal>
-        <div style={{ borderTop: "1px solid #1a1a1a" }}>
-          {PROJECTS.map((proj, i) => (
-            <Reveal key={proj.id} delay={i * 0.08}>
-              <ExpandableCard item={proj} isExpanded={expandedProj === proj.id} onToggle={() => setExpandedProj(expandedProj === proj.id ? null : proj.id)} type="project" />
-            </Reveal>
-          ))}
-        </div>
-      </section>
-
-      {/* SKILLS */}
-      <section ref={(el) => (sectionRefs.current[3] = el)} style={{ padding: "100px 48px", maxWidth: 1100, margin: "0 auto" }}>
-        <Reveal>
-          <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 3, color: "#444" }}>03</span>
-          <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(32px, 4.5vw, 50px)", fontWeight: 500, marginTop: 6, marginBottom: 40 }}>Skills & Education</h2>
-        </Reveal>
-        <Reveal delay={0.08}>
-          <div style={{ display: "flex", gap: 4, marginBottom: 36, flexWrap: "wrap" }}>
-            {SKILL_TABS.map((tab) => (
-              <button key={tab.key} onClick={() => setActiveTab(tab.key)} style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 1.5, textTransform: "uppercase", padding: "10px 20px", borderRadius: 24, border: `1px solid ${activeTab === tab.key ? "#E8FC73" : "#1a1a1a"}`, background: activeTab === tab.key ? "#E8FC7315" : "transparent", color: activeTab === tab.key ? "#E8FC73" : "#555", cursor: "pointer", transition: "all 0.3s ease" }}>
-                {tab.label}
-              </button>
-            ))}
-          </div>
-        </Reveal>
-        <div style={{ minHeight: 220 }}>
-          {activeTab !== "courses" && (
-            <div key={activeTab} style={{ animation: "slideIn 0.4s ease" }}>
-              <TagCloud items={SKILLS[activeTab]} colors={TAG_COLORS} />
-            </div>
-          )}
-          {activeTab === "courses" && (
-            <div style={{ animation: "slideIn 0.4s ease" }}>
-              <div style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(240px, 1fr))", gap: 10 }}>
-                {COURSES.map((c, i) => (
-                  <div key={c} style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 13, color: "#777", padding: "12px 16px", borderRadius: 10, border: "1px solid #181818", background: "rgba(255,255,255,0.01)", display: "flex", alignItems: "center", gap: 10 }}>
-                    <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#444", minWidth: 20 }}>{String(i + 1).padStart(2, "0")}</span>{c}
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
-        </div>
-      </section>
-
-      {/* CONTACT */}
-      <section ref={(el) => (sectionRefs.current[4] = el)} style={{ padding: "100px 48px 80px", maxWidth: 1100, margin: "0 auto" }}>
-        <div style={{ display: "grid", gridTemplateColumns: "1fr 1fr", gap: 80, alignItems: "start" }}>
+      <main className="site-main" id="top">
+        {/* HERO */}
+        <section className="th-hero">
           <div>
-            <Reveal>
-              <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 11, letterSpacing: 3, color: "#444" }}>04</span>
-              <h2 style={{ fontFamily: "'Playfair Display', serif", fontSize: "clamp(32px, 4.5vw, 50px)", fontWeight: 500, marginTop: 6, marginBottom: 16 }}>Let's connect</h2>
-            </Reveal>
-            <Reveal delay={0.1}>
-              <p style={{ fontFamily: "'DM Sans', sans-serif", fontSize: 15, lineHeight: 1.8, color: "#777", marginBottom: 28 }}>
-                Interested in collaborating, have a project idea, or just want to say hello? I'd love to hear from you.
-              </p>
-            </Reveal>
-            <Reveal delay={0.15}>
-              <div style={{ display: "flex", flexDirection: "column", gap: 10, fontFamily: "'JetBrains Mono', monospace", fontSize: 12, color: "#555" }}>
-                <a href="mailto:taline.henin@gmail.com" style={{ color: "#888", textDecoration: "none" }}>taline.henin@gmail.com</a>
-                <a href="https://linkedin.com/in/taline-henin/" target="_blank" rel="noreferrer" style={{ color: "#666", textDecoration: "none" }}>linkedin.com/in/taline-henin</a>
-                <a href="https://github.com/talinehenin" target="_blank" rel="noreferrer" style={{ color: "#666", textDecoration: "none" }}>github.com/talinehenin</a>
-                <span style={{ color: "#555" }}>Greater Toronto Area, Ontario</span>
-                <div style={{ marginTop: 8 }}><LiveClock /></div>
-              </div>
-            </Reveal>
+            <div className="th-hero__prompt">&gt; whoami<span className="th-cursor" aria-hidden="true" /></div>
+            <h1 className="th-hero__name">
+              <Sparkle size="xl" color="is-cyan" twinkle className="th-hero__spark" style={{ right: -30, top: 0 }} />
+              <Sparkle size="sm" color="is-magenta" className="th-hero__spark" style={{ left: "46%", bottom: -14 }} />
+              <Sparkle size="lg" color="is-phosphor" twinkle className="th-hero__spark" style={{ left: -4, bottom: -20 }} />
+              <Wordmark width={420} height={112} />
+            </h1>
+            <p className="th-hero__intro">
+              I&apos;m a computer science student at the University of Guelph, specializing in AI. This past summer I shipped payout
+              corridors and end-to-end tests for a payments platform at Cybrid.
+            </p>
+            <div className="th-hero__actions">
+              <a className="th-btn is-brand" href="#projects">&gt; VIEW WORK</a>
+              <a className="th-btn is-magenta" href="#contact">&gt; SAY HI</a>
+            </div>
+            <div className="hero-meta">
+              <span className="th-tag th-tag--outline">B.COMP · CS / AI</span>
+              <span className="th-tag th-tag--outline">UNIVERSITY OF GUELPH</span>
+              <span className="th-tag th-tag--outline">CLASS OF 2028</span>
+            </div>
           </div>
-          <div style={{ paddingTop: 56 }}>
-            <Reveal delay={0.1}><ContactForm /></Reveal>
+          <div className="th-hero__art" aria-hidden="true">
+            <Pixelscape color="is-brand" />
+            <Pixelscape color="is-cyan" />
+            <Pixelscape color="is-magenta" />
+            <Pixelscape color="is-phosphor" />
           </div>
-        </div>
-      </section>
+        </section>
 
-      {/* FOOTER */}
-      <footer style={{ padding: "36px 48px", maxWidth: 1100, margin: "0 auto", borderTop: "1px solid #141414", display: "flex", justifyContent: "space-between", alignItems: "center", flexWrap: "wrap", gap: 12 }}>
-        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#333", letterSpacing: 1 }}>© {new Date().getFullYear()} TALINE HENIN — BUILT WITH ✦</span>
-        <span style={{ fontFamily: "'JetBrains Mono', monospace", fontSize: 10, color: "#282828", letterSpacing: 1 }}>NEXT.JS + TAILWIND CSS + VERCEL</span>
+        {/* EXPERIENCE */}
+        <section className="site-section" id="experience">
+          <Heading i={0}>Experience</Heading>
+          <ol className="th-timeline">
+            {EXPERIENCE.map((exp, i) => (
+              <li key={exp.company} className={SPARKLE_ROTATION[i % 4]}>
+                <div className="th-timeline__date">{exp.period}</div>
+                <div className="th-timeline__role">{exp.role}</div>
+                <div className="exp-company">{exp.company}{exp.team ? ` · ${exp.team.toUpperCase()}` : ""}</div>
+                <p className="th-timeline__desc">{exp.summary}</p>
+                <details className="exp-more">
+                  <summary>
+                    <span className="exp-more__show">MORE</span>
+                    <span className="exp-more__hide">LESS</span>
+                  </summary>
+                  <ul className="th-sparkle-list">
+                    {exp.bullets.map((b, j) => (
+                      <li key={j}>
+                        <Sparkle size="sm" color={SPARKLE_ROTATION[(i + j) % 4]} />
+                        {b}
+                      </li>
+                    ))}
+                  </ul>
+                </details>
+              </li>
+            ))}
+          </ol>
+        </section>
+
+        {/* PROJECTS */}
+        <section className="site-section" id="projects">
+          <Heading i={1}>Projects</Heading>
+          <div className="project-grid">
+            {PROJECTS.map((p, i) => {
+              const body = (
+                <>
+                  <Pixelscape color={rot(i + 3)} className="th-card__thumb" />
+                  <div className="th-card__body">
+                    <span className="th-card__meta">{p.meta}{p.link ? " · GITHUB" : ""}</span>
+                    <h3 className="th-card__title">{p.title}</h3>
+                    <p className="th-card__desc">{p.description}</p>
+                    <div className="th-card__tags">
+                      {p.tags.map((t) => <span key={t} className={`th-tag ${rot(tagIndex++)}`}>{t}</span>)}
+                    </div>
+                  </div>
+                </>
+              );
+              return p.link ? (
+                <a key={p.title} className="th-card" href={p.link} target="_blank" rel="noreferrer">{body}</a>
+              ) : (
+                <div key={p.title} className="th-card th-card--static">{body}</div>
+              );
+            })}
+          </div>
+        </section>
+
+        {/* SKILLS & EDUCATION */}
+        <section className="site-section" id="skills">
+          <Heading i={2}>Skills</Heading>
+          <div className="window-grid">
+            {SKILLS.map((group, i) => (
+              <Window key={group.title} title={group.title} color={SPARKLE_ROTATION[i % 4]}>
+                <div className="tag-row">
+                  {group.items.map((item, j) => <span key={item} className={`th-tag ${rot(i + j)}`}>{item}</span>)}
+                </div>
+              </Window>
+            ))}
+            <Window title="EDUCATION.TXT" color="is-sunset" raised>
+              <h3 className="edu-title">University of Guelph</h3>
+              <p className="edu-meta">B.COMP HONOURS CS · AI SPECIALIZATION · SEPT 2024 — APR 2028</p>
+              <ul className="th-sparkle-list">
+                {COURSES.map((c, i) => (
+                  <li key={c}>
+                    <Sparkle size="sm" color={SPARKLE_ROTATION[i % 4]} />
+                    {c}
+                  </li>
+                ))}
+              </ul>
+            </Window>
+          </div>
+        </section>
+
+        {/* CONTACT */}
+        <section className="site-section" id="contact">
+          <Heading i={3}>Say hi</Heading>
+          <div className="contact-grid">
+            <Window title="CONTACT.TXT" color="is-cyan">
+              <p style={{ margin: 0 }}>
+                Want to work together, talk about a project, or just say hello? I&apos;d love to hear from you.
+              </p>
+              <ul className="contact-links">
+                <li><a href={`mailto:${EMAIL}`}>{EMAIL}</a></li>
+                <li><a href="https://linkedin.com/in/taline-henin" target="_blank" rel="noreferrer">LINKEDIN.COM/IN/TALINE-HENIN</a></li>
+                <li><a href="https://github.com/talinehenin" target="_blank" rel="noreferrer">GITHUB.COM/TALINEHENIN</a></li>
+                <li><span>● GREATER TORONTO AREA, ONTARIO</span></li>
+              </ul>
+            </Window>
+            <Window title="MESSAGE" color="is-magenta">
+              <ContactForm />
+            </Window>
+          </div>
+        </section>
+      </main>
+
+      <footer className="th-footer site-footer">
+        <div className="th-footer__row">
+          <PixelRow count={40} />
+        </div>
+        <div className="th-footer__row">
+          <span>© {new Date().getFullYear()} TALINE HENIN · BUILT BY HAND</span>
+          <span className="th-footer__links">
+            <a href="https://github.com/talinehenin" target="_blank" rel="noreferrer">GITHUB</a>
+            <a href="https://linkedin.com/in/taline-henin" target="_blank" rel="noreferrer">LINKEDIN</a>
+            <a href={`mailto:${EMAIL}`}>EMAIL</a>
+          </span>
+        </div>
       </footer>
     </>
   );

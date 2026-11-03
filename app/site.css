@@ -1,0 +1,165 @@
+/* Page layout on top of the design system components. */
+.site-nav {
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+.site-main {
+  max-width: 1080px;
+  margin: 0 auto;
+  padding: 0 var(--space-3);
+}
+
+.site-section {
+  padding: var(--space-6) 0 0;
+  scroll-margin-top: 72px;
+}
+
+.site-section > .th-heading {
+  margin-bottom: var(--space-4);
+}
+
+.hero-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+/* Experience */
+.exp-company {
+  font-family: var(--font-terminal);
+  font-size: 22px;
+  line-height: 22px;
+  letter-spacing: 0.04em;
+  color: var(--text-cyan);
+}
+
+.th-timeline li:nth-child(4n + 2) .exp-company { color: var(--text-magenta); }
+.th-timeline li:nth-child(4n + 3) .exp-company { color: var(--text-phosphor); }
+.th-timeline li:nth-child(4n) .exp-company { color: var(--ink); }
+
+.exp-more {
+  margin-top: var(--space-2);
+}
+
+.exp-more summary {
+  display: inline-block;
+  cursor: pointer;
+  list-style: none;
+  font-family: var(--font-terminal);
+  font-size: 19px;
+  line-height: 20px;
+  color: var(--link);
+}
+
+.exp-more summary::-webkit-details-marker { display: none; }
+.exp-more summary::before { content: "> "; }
+.exp-more[open] summary .exp-more__show,
+.exp-more:not([open]) summary .exp-more__hide { display: none; }
+
+.exp-more .th-sparkle-list {
+  margin-top: var(--space-3);
+  max-width: 72ch;
+}
+
+.exp-more .th-sparkle-list li { color: var(--ink-muted); }
+
+/* Projects */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+  gap: var(--space-4);
+}
+
+.th-card--static:hover { transform: none; box-shadow: none; }
+
+/* Skills */
+.window-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.tag-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+}
+
+.edu-title {
+  font-family: var(--font-display);
+  font-size: 24px;
+  line-height: 28px;
+  margin: 0 0 var(--space-1);
+}
+
+.edu-meta {
+  font-family: var(--font-terminal);
+  font-size: 19px;
+  line-height: 20px;
+  color: var(--ink-muted);
+  margin: 0 0 var(--space-3);
+}
+
+/* Contact */
+.contact-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-4);
+  align-items: start;
+}
+
+.contact-links {
+  list-style: none;
+  margin: var(--space-3) 0 0;
+  padding: 0;
+  display: grid;
+  gap: var(--space-2);
+  font-family: var(--font-terminal);
+  font-size: 22px;
+  line-height: 22px;
+}
+
+.contact-links span { color: var(--ink-muted); }
+
+.contact-form {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.site-footer {
+  margin-top: var(--space-6);
+}
+
+.site-footer .th-footer__row {
+  max-width: 1080px;
+  width: 100%;
+  margin: 0 auto;
+}
+
+@media (max-width: 640px) {
+  .site-section { padding-top: var(--space-5); }
+  .th-heading { font-size: 48px; }
+  .th-hero { padding: var(--space-5) 0; }
+}
+
+/* Bullets nested in the timeline keep their sparkles, not the timeline's square markers. */
+.th-timeline .th-sparkle-list li {
+  padding: 0;
+}
+
+.th-timeline .th-sparkle-list li::before {
+  content: none;
+}
+
+/* Let the hero wordmark shrink on narrow screens. */
+.th-hero__name {
+  max-width: calc(100% - 32px);
+}
+
+.th-hero__name .th-wordmark {
+  width: 100%;
+}
