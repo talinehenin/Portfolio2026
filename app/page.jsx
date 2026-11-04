@@ -27,9 +27,9 @@ const THEMES = [
 const EXPERIENCE = [
   {
     company: "TD",
-    role: "Incoming Intern",
+    role: "Software Engineering Intern",
     period: "WINTER 2027 · INCOMING",
-    summary: "I'm joining TD for the winter 2027 term.",
+    summary: "I'm joining TD as a software engineering intern for the winter 2027 term.",
     bullets: [],
   },
   {
