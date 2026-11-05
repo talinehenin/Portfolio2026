@@ -92,6 +92,7 @@ const PROJECTS = [
     tags: ["JAVASCRIPT", "SHEETJS", "HTML/CSS"],
     link: "https://syllaboard.ca",
     linkLabel: "SYLLABOARD.CA",
+    cover: "/images/projects/syllaboard.jpg",
   },
   {
     title: "Ghostboard",
