@@ -101,6 +101,7 @@ const PROJECTS = [
     tags: ["JAVASCRIPT", "SUPABASE", "HTML/CSS"],
     link: "https://talinehenin.github.io/ghostboard/",
     linkLabel: "LIVE",
+    cover: "/images/projects/ghostboard.png",
   },
   {
     title: "Treasure Run",
@@ -344,7 +345,11 @@ export default function Portfolio() {
             {PROJECTS.map((p, i) => {
               const body = (
                 <>
-                  <Pixelscape color={rot(i + 3)} className="th-card__thumb" />
+                  {p.cover ? (
+                    <img className="th-card__thumb th-card__cover" src={p.cover} alt={`${p.title} cover`} loading="lazy" />
+                  ) : (
+                    <Pixelscape color={rot(i + 3)} className="th-card__thumb" />
+                  )}
                   <div className="th-card__body">
                     <span className="th-card__meta">{p.meta}{p.linkLabel ? ` · ${p.linkLabel}` : ""}</span>
                     <h3 className="th-card__title">{p.title}</h3>
