@@ -92,6 +92,13 @@ const PROJECTS = [
     linkLabel: "SYLLABOARD.CA",
   },
   {
+    title: "Ghostboard",
+    meta: "WEB APP",
+    description:
+      "A calm kanban board for job applications that asks whether you've been ghosted once one goes quiet for three weeks. Data stays in the browser, with optional Supabase sign-in that syncs and merges boards, plus insights on reply rates and how far applications get.",
+    tags: ["JAVASCRIPT", "SUPABASE", "HTML/CSS"],
+  },
+  {
     title: "Treasure Run",
     meta: "TERMINAL GAME",
     description:
