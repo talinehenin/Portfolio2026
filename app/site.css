@@ -423,3 +423,11 @@
   .printout__paper { padding: 0; background: none; clip-path: none !important; animation: none !important; }
   .printout__paper::before, .printout__paper::after { display: none; }
 }
+
+/* Project cover images fill the 16:9 thumbnail, anchored to the top where the artwork sits. */
+.th-card__cover {
+  display: block;
+  width: 100%;
+  object-fit: cover;
+  object-position: top left;
+}
