@@ -5,6 +5,14 @@ import "./site.css";
 export const metadata = {
   title: "Taline Henin",
   description: "Portfolio of Taline Henin, a computer science student at the University of Guelph specializing in AI.",
+  icons: {
+    icon: [
+      { url: "/favicon.ico", sizes: "48x48" },
+      { url: "/favicon.svg", type: "image/svg+xml" },
+    ],
+    apple: "/apple-touch-icon.png",
+  },
+  manifest: "/site.webmanifest",
 };
 
 // Apply the saved theme before first paint so the page never flashes the wrong one.

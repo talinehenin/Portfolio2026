@@ -144,6 +144,7 @@
   .site-section { padding-top: var(--space-5); }
   .th-heading { font-size: 48px; }
   .th-hero { padding: var(--space-5) 0; }
+  .th-nav__links { gap: var(--space-1) var(--space-2); flex-wrap: wrap; font-size: 19px; line-height: 20px; }
 }
 
 /* Bullets nested in the timeline keep their sparkles, not the timeline's square markers. */
@@ -162,4 +163,263 @@
 
 .th-hero__name .th-wordmark {
   width: 100%;
+}
+
+/* Resume: a dot-matrix printer feeding out continuous-form paper. */
+.resume-section {
+  --page-bg: var(--bg);
+}
+
+.printer {
+  max-width: 860px;
+  margin: 0 auto;
+}
+
+.printer__head {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  padding: var(--space-2) var(--space-3);
+  background: var(--surface);
+  border: 1px solid var(--line);
+  box-shadow: var(--shadow-pixel);
+  font-family: var(--font-terminal);
+  font-size: 22px;
+  line-height: 22px;
+  letter-spacing: 0.04em;
+}
+
+.printer__cmd { color: var(--text-phosphor); }
+
+.printer__status {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  color: var(--ink-muted);
+}
+
+.printer__led {
+  width: 10px;
+  height: 10px;
+  background: var(--phosphor);
+}
+
+.printer__led.is-busy {
+  background: var(--magenta);
+  animation: th-blink 0.4s steps(1) infinite;
+}
+
+/* The paper slot the printout comes out of. */
+.printer__slot {
+  height: 10px;
+  margin: 0 var(--space-4);
+  background: var(--ink);
+  border: 2px solid var(--line);
+  border-top: 0;
+}
+
+/* Paper uses Plastic Day's ink in Night and Day, and stays green-on-black in Phosphor. */
+.printout {
+  --paper: #f8f6fc;
+  --paper-band: rgba(56, 242, 138, 0.12);
+  --ink: #1a1540;
+  --ink-muted: #4f4780;
+  --line: #7b6fd6;
+  --link: #3a1fe0;
+  --focus: #3a1fe0;
+  --text-cyan: #00707d;
+  --text-magenta: #b0148c;
+  --text-phosphor: #0d7a43;
+  margin: 0 var(--space-5);
+  color: var(--ink);
+}
+
+[data-theme="phosphor"] .printout {
+  --paper: #04170b;
+  --paper-band: rgba(56, 242, 138, 0.07);
+  --ink: #c8ffd9;
+  --ink-muted: #6fd99a;
+  --line: #2fbf6a;
+  --link: #7dffb0;
+  --focus: #c4ff5c;
+  --text-cyan: #7dffb0;
+  --text-magenta: #c4ff5c;
+  --text-phosphor: #38f28a;
+}
+
+.printout__paper {
+  position: relative;
+  padding: var(--space-5) 56px var(--space-4);
+  font-family: var(--font-mono);
+  font-size: 14px;
+  line-height: 22px;
+}
+
+/* Tractor-feed margins: square sprocket holes behind a perforated edge. */
+.printout__paper::before,
+.printout__paper::after {
+  content: "";
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  width: 32px;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='24'%3E%3Crect x='11' y='7' width='10' height='10'/%3E%3C/svg%3E") 0 0/32px 24px repeat-y;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='24'%3E%3Crect x='11' y='7' width='10' height='10'/%3E%3C/svg%3E") 0 0/32px 24px repeat-y;
+  background: var(--page-bg);
+}
+
+.printout__paper::before { left: 0; }
+.printout__paper::after { right: 0; }
+
+/* Perforation lines inside the sprocket margins, then green-bar stripes one band every two lines. */
+.printout__paper {
+  background-image:
+    linear-gradient(to bottom, var(--line) 50%, transparent 50%),
+    linear-gradient(to bottom, var(--line) 50%, transparent 50%),
+    repeating-linear-gradient(to bottom, var(--paper) 0 44px, var(--paper-band) 44px 88px);
+  background-size: 1px 8px, 1px 8px, auto;
+  background-position: 36px 0, calc(100% - 36px) 0, 0 0;
+  background-repeat: repeat-y, repeat-y, repeat;
+  background-color: var(--paper);
+}
+
+.printout__header {
+  text-align: center;
+  margin-bottom: var(--space-4);
+}
+
+.printout__header .th-wordmark { margin: 0 auto; max-width: 100%; height: auto; }
+
+.printout__name {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+.printout__contact {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: var(--space-1) var(--space-3);
+  margin: var(--space-2) 0 0;
+  color: var(--ink-muted);
+}
+
+.printout a { color: var(--link); }
+
+.printout__section { margin-top: var(--space-4); }
+
+.printout__heading {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  margin: 0 0 var(--space-2);
+  font-family: var(--font-terminal);
+  font-size: 22px;
+  line-height: 22px;
+  font-weight: 400;
+  letter-spacing: 0.06em;
+}
+
+.printout__heading::after {
+  content: "";
+  flex: 1;
+  border-top: 2px dashed var(--line);
+}
+
+.printout__entry + .printout__entry { margin-top: var(--space-3); }
+
+.printout__row {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.printout__row strong { font-weight: 500; color: var(--text-magenta); }
+.printout__date { color: var(--text-cyan); }
+.printout__sub { color: var(--ink-muted); font-style: italic; }
+
+.printout__list {
+  list-style: none;
+  margin: var(--space-1) 0 0;
+  padding: 0;
+}
+
+.printout__list li {
+  position: relative;
+  padding-left: 2ch;
+}
+
+.printout__list li::before {
+  content: ">";
+  position: absolute;
+  left: 0;
+  color: var(--text-phosphor);
+}
+
+.printout__skills { margin: 0; display: grid; gap: var(--space-1); }
+.printout__skills div { display: grid; grid-template-columns: 22ch 1fr; gap: var(--space-2); }
+.printout__skills dt { color: var(--text-cyan); }
+.printout__skills dd { margin: 0; }
+
+.printout__eof {
+  margin: var(--space-4) 0 0;
+  text-align: center;
+  color: var(--ink-muted);
+  letter-spacing: 0.2em;
+}
+
+/* Feeding: the page is revealed top-down in line-sized steps. */
+.printout.is-armed .printout__paper { clip-path: inset(0 0 100% 0); }
+.printout.is-printing .printout__paper { animation: printout-feed 2.4s steps(36, end) both; }
+
+@keyframes printout-feed {
+  from { clip-path: inset(0 0 100% 0); }
+  to { clip-path: inset(0 0 0 0); }
+}
+
+.printer__actions {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+  margin-top: var(--space-4);
+}
+
+.th-btn:disabled { opacity: 0.6; cursor: default; transform: none; }
+
+@media (max-width: 640px) {
+  .printout { margin: 0 var(--space-2); }
+  .printer__slot { margin: 0; }
+  .printout__paper { padding: var(--space-4) 44px; font-size: 13px; line-height: 20px; }
+  .printout__skills div { grid-template-columns: 1fr; gap: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .printout.is-printing .printout__paper { animation: none; }
+  .printer__led.is-busy { animation: none; }
+}
+
+/* Printing the page prints just the resume, on plain paper. */
+@media print {
+  body * { visibility: hidden; }
+  .printout, .printout * { visibility: visible; }
+  .printout {
+    position: absolute;
+    inset: 0 auto auto 0;
+    width: 100%;
+    margin: 0;
+    --paper: #ffffff;
+    --ink: #000000;
+    --ink-muted: #333333;
+  }
+  .printout__paper { padding: 0; background: none; clip-path: none !important; animation: none !important; }
+  .printout__paper::before, .printout__paper::after { display: none; }
 }
