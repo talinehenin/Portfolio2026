@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import Wordmark from "./Wordmark";
+import Resume from "./Resume";
 
 const EMAIL = "taline.henin@gmail.com";
 
@@ -15,7 +16,8 @@ const NAV = [
   { id: "experience", label: "EXPERIENCE", color: "is-cyan" },
   { id: "projects", label: "PROJECTS", color: "is-magenta" },
   { id: "skills", label: "SKILLS", color: "is-phosphor" },
-  { id: "contact", label: "CONTACT", color: "is-brand" },
+  { id: "resume", label: "RESUME", color: "is-brand" },
+  { id: "contact", label: "CONTACT", color: "is-cyan" },
 ];
 
 const THEMES = [
@@ -388,9 +390,15 @@ export default function Portfolio() {
           </div>
         </section>
 
+        {/* RESUME */}
+        <section className="site-section resume-section" id="resume">
+          <Heading i={3}>Resume</Heading>
+          <Resume email={EMAIL} experience={EXPERIENCE} projects={PROJECTS} skills={SKILLS} />
+        </section>
+
         {/* CONTACT */}
         <section className="site-section" id="contact">
-          <Heading i={3}>Say hi</Heading>
+          <Heading i={0}>Say hi</Heading>
           <div className="contact-grid">
             <Window title="CONTACT.TXT" color="is-cyan">
               <p style={{ margin: 0 }}>
